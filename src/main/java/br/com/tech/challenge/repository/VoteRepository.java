@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-interface VoteRepository extends JpaRepository<Vote, UUID> {
+public interface VoteRepository extends JpaRepository<Vote, UUID> {
 
     @Query("select count(1) > 0 from Vote where session.id = :sessionId and associate.cpf = :associateDocument")
     Boolean existsVoteFromAssociateAndSession(

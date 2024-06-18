@@ -1,0 +1,25 @@
+spring:
+  main:
+    banner-mode: "off"
+  rabbitmq:
+    password: guest
+    username: guest
+    port: '5672'
+    host: localhost
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: admin
+    password: 87654321
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    config:
+      import-check:
+        enabled: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+rest-validator:
+  url: http://localhost:3000/validator

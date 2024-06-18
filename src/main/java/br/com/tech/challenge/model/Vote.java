@@ -1,6 +1,6 @@
 package br.com.tech.challenge.model;
 
-import br.com.ntconsult.challenge.definitions.VoteOptions;
+import br.com.tech.challenge.definitions.VoteOptions;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,4 +25,9 @@ public class Vote {
     @Enumerated(EnumType.STRING)
     private VoteOptions vote;
 
+    public Vote(Session session, Associate associate, VoteOptions vote) {
+        this.session = session;
+        this.associate = associate;
+        this.vote = vote;
+    }
 }

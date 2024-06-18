@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-interface AssociateRepository extends JpaRepository<Associate, UUID> {
+public interface AssociateRepository extends JpaRepository<Associate, UUID> {
 
     Optional<Associate> findByCpf(String cpf);
 

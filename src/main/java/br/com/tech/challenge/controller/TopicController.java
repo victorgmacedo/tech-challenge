@@ -1,16 +1,27 @@
 package br.com.tech.challenge.controller;
 
-import br.com.tech.challenge.controller.data.*;
+import br.com.tech.challenge.controller.data.SessionDTO;
+import br.com.tech.challenge.controller.data.SessionDefinitionDTO;
+import br.com.tech.challenge.controller.data.TopicRequestDTO;
+import br.com.tech.challenge.controller.data.TopicResponseDTO;
+import br.com.tech.challenge.controller.data.VoteDTO;
 import br.com.tech.challenge.domain.AssociateDetail;
 import br.com.tech.challenge.domain.SessionDefinition;
 import br.com.tech.challenge.domain.VoteDetail;
-import br.com.tech.challenge.exceptions.SessionNotFoundException;
 import br.com.tech.challenge.mapper.SessionMapper;
 import br.com.tech.challenge.mapper.TopicMapper;
 import br.com.tech.challenge.model.Session;
+import br.com.tech.challenge.service.SessionService;
+import br.com.tech.challenge.service.TopicService;
+import br.com.tech.challenge.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
@@ -44,7 +55,7 @@ public class TopicController {
                         topicMapper.toModel(topicDTO)
                 )
         );
-        return ResponseEntity.created(URI.create(PATH + "/" + topic.id())).body(topic);
+        return ResponseEntity.created(URI.create(STR."\{PATH}/\{topic.getId()}")).body(topic);
     }
 
     @PostMapping("/{id}/session/open")
@@ -55,18 +66,16 @@ public class TopicController {
                 sessionDefinitionDTO.timeToVote()
         );
         SessionDTO session = sessionMapper.toDTO(sessionService.create(sessionDefinition));
-        return ResponseEntity.created(URI.create(PATH + "/" + session.getId())).body(session);
+        return ResponseEntity.created(URI.create(STR."\{PATH}/\{session.getId()}")).body(session);
     }
 
     @PostMapping("{id}/session/vote")
     public ResponseEntity<Void> vote(@PathVariable("id") String id, @RequestBody VoteDTO voteDTO) {
         Session session = sessionService.findByTopicId(id);
-        if (session == null) {
-            throw new SessionNotFoundException("There is no session open for topic {ID} " + id);
-        }
+
         VoteDetail voteDetail = new VoteDetail(
                 session,
-                new AssociateDetail(voteDTO.getAssociate().getCpf()),
+                new AssociateDetail(voteDTO.getAssociate().cpf()),
                 voteDTO.getVote()
         );
         voteService.vote(voteDetail);
